@@ -1,0 +1,2 @@
+class AccountMovement < ApplicationRecord
+end

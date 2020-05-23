@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="card shadow-lg o-hidden border-0 my-5">
+    <div class="card-body p-0">
+      <div class="row">
+<!--        <div class="col-lg-5 d-none d-lg-flex">-->
+<!--          <div class="flex-grow-1 bg-register-image" style="background-image: url(&quot;assets/img/dogs/image2.jpeg&quot;);"></div>-->
+<!--        </div>-->
+        <div class="col">
+          <div class="p-5">
+            <div class="text-center">
+              <h4 class="text-dark mb-4">Criar uma Conta!</h4>
+            </div>
+            <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: {class:"user"}) do |f| %>
+              <%= render "devise/shared/error_messages", resource: resource %>
+
+              <div class="form-group">
+                <%= f.text_field :cpf, autofocus: true, class:"form-control form-control-user",
+                                 id:"exampleInputEmail", 'aria-describedby':"emailHelp", placeholder:"Digite o cpf"%>
+
+              </div>
+              <div class="form-group">
+                <%= f.password_field :password, class:"form-control form-control-user",
+                                     id:"exampleInputPassword", placeholder:"Digite a senha" %>
+                <% if @minimum_password_length %>
+                  <em>(<%= @minimum_password_length %> characters minimum)</em>
+                <% end %><br />
+              </div>
+              <div class="form-group">
+                <%= f.password_field :password_confirmation, class:"form-control form-control-user",
+                                     id:"newInputPassword", placeholder:"Repita a Senha" %>
+              </div>
+              <button class="btn btn-primary btn-block text-white btn-user" type="submit">Registrar Conta</button>              <hr>
+            <% end %>
+            <div class="text-center">
+              <a class="small" href="<%= new_client_password_path %>">Esqueceu sua senha</a>
+            </div>
+            <div class="text-center">
+              <a class="small" href="<%= new_client_session_path %>">Já tem uma conta? Logue!</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%#= render "clients/shared/links" %>
