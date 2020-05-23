@@ -4,7 +4,16 @@ class AccountsController < ApplicationController
   # GET /accounts
   # GET /accounts.json
   def index
-    @accounts = Account.all
+    @filterrific = initialize_filterrific(
+        Account.where(client_id: current_client.id),
+        params[:filterrific]
+    ) or return
+    @accounts = @filterrific.find.page(params[:page])
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # GET /accounts/1

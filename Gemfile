@@ -4,6 +4,12 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.7.1'
 #Flexible authentication solution for Rails with Warden
 gem 'devise'
+#Filterrific is a Rails Engine plugin that makes it easy to filter, search, and sort your ActiveRecord lists:
+gem 'filterrific'
+#A Scope & Engine based, clean, powerful, customizable and sophisticated paginator for modern web app frameworks and ORMs
+gem 'kaminari'
+#Quick Bootstrap 4 styling
+gem 'bootstrap4-kaminari-views'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.3', '>= 6.0.3.1'

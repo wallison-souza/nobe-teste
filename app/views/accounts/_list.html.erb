@@ -1,0 +1,36 @@
+<div  id="filterrific_results" class="table-responsive table mt-2"  role="grid" aria-describedby="dataTable_info">
+  <table class="table my-0" id="dataTable">
+    <thead>
+    <tr>
+      <th>Conta</th>
+      <th>Agência</th>
+      <th>Situacao</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% if accounts.blank? %>
+      <tr>
+        <td> Não existem contas cadastradas!</td>
+      </tr>
+    <% else %>
+      <% accounts.each do |account| %>
+        <tr>
+          <td><%= account.num_account %>></td>
+          <td><%= account.num_branch %>></td>
+          <td><%= account.inative ? 'ENCERRADA' : 'ATIVA' %>></td>
+          <td class="text-center">
+            <a class="btn btn-primary" type="button" href='<%= account_path(account.id)%>'>
+              <i class="fa fa-arrow-right"></i>
+            </a>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-between">
+    <%= page_entries_info @accounts, entry_name: 'resultado(s)' %>
+    <%= paginate @accounts, theme:'twitter-bootstrap-4' %>
+  </div>
+</div>

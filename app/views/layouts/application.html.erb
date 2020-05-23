@@ -16,6 +16,8 @@
     <% if alert %>
       <p class="alert alert-danger"><%= alert %></p>
     <% end %>
-    <%= yield %>
+    <div id="wrapper" class="d-flex">
+      <%= yield %>
+    </div>
   </body>
 </html>
