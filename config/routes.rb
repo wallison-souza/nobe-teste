@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
 
   resources :account_movements
-  resources :accounts
+  resources :accounts, except: :new do
+    get '/new/:client', to:'accounts#new', as:'new', on: :collection
+  end
   devise_for :clients
   root to: 'accounts#index'
 

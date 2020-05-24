@@ -16,13 +16,19 @@
     <% else %>
       <% accounts.each do |account| %>
         <tr>
-          <td><%= account.num_account %>></td>
-          <td><%= account.num_branch %>></td>
-          <td><%= account.inative ? 'ENCERRADA' : 'ATIVA' %>></td>
+          <td><%= account.num_account %></td>
+          <td><%= account.num_branch %></td>
+          <td><%= account.inative ? 'ENCERRADA' : 'ATIVA' %></td>
           <td class="text-center">
-            <a class="btn btn-primary" type="button" href='<%= account_path(account.id)%>'>
+            <%= link_to  account, class:'btn btn-primary', title:"Visualizar" do%>
               <i class="fa fa-arrow-right"></i>
-            </a>
+            <% end %>
+            <button type='button' class="btn btn btn-info btn-edit" title="Editar" action="<%= edit_account_path(account.id) %>">
+              <i class="fa fa-pencil-alt"></i>
+            </button>
+            <%= link_to  account, class:'btn btn-danger',method: :delete, data: { confirm: 'Você tem certeza?' } , title:"Excluir" do%>
+              <i class="fa fa-trash"></i>
+            <% end %>
           </td>
         </tr>
       <% end %>
@@ -30,7 +36,11 @@
     </tbody>
   </table>
   <div class="d-flex justify-content-between">
-    <%= page_entries_info @accounts, entry_name: 'resultado(s)' %>
-    <%= paginate @accounts, theme:'twitter-bootstrap-4' %>
+    <div class="info">
+      <%= page_entries_info @accounts, entry_name: 'resultado(s)' %>
+    </div>
+    <div class="paginate">
+      <%= paginate @accounts, theme:'twitter-bootstrap-4' %>
+    </div>
   </div>
 </div>

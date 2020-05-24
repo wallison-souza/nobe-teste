@@ -1,6 +1,6 @@
 class AccountsController < ApplicationController
   before_action :set_account, only: [:show, :edit, :update, :destroy]
-
+  include FullErrorMessage
   # GET /accounts
   # GET /accounts.json
   def index
@@ -12,7 +12,7 @@ class AccountsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.js
+      format.js { render 'accounts/js/index' }
     end
   end
 
@@ -27,10 +27,19 @@ class AccountsController < ApplicationController
   # GET /accounts/new
   def new
     @account = Account.new
+    @account.client_id = params[:client]
+    respond_to do |format|
+      format.html
+      format.json { render 'accounts/form' }
+    end
   end
 
   # GET /accounts/1/edit
   def edit
+    respond_to do |format|
+      format.html
+      format.json { render 'accounts/form' }
+    end
   end
 
   # POST /accounts
@@ -40,11 +49,11 @@ class AccountsController < ApplicationController
 
     respond_to do |format|
       if @account.save
-        format.html { redirect_to @account, notice: 'Account was successfully created.' }
+        format.html { redirect_to @account, flash:{success: 'Conta criada com sucesso!' } }
         format.json { render :show, status: :created, location: @account }
       else
         format.html { render :new }
-        format.json { render json: @account.errors, status: :unprocessable_entity }
+        format.json { render json: FullErrorMessage.error_message(@account), status: :unprocessable_entity }
       end
     end
   end
@@ -54,11 +63,11 @@ class AccountsController < ApplicationController
   def update
     respond_to do |format|
       if @account.update(account_params)
-        format.html { redirect_to @account, notice: 'Account was successfully updated.' }
+        format.html { redirect_to @account, flash:{success: 'Conta foi atualizada com sucesso!' } }
         format.json { render :show, status: :ok, location: @account }
       else
         format.html { render :edit }
-        format.json { render json: @account.errors, status: :unprocessable_entity }
+        format.json { render json: FullErrorMessage.error_message(@account), status: :unprocessable_entity }
       end
     end
   end
@@ -66,21 +75,27 @@ class AccountsController < ApplicationController
   # DELETE /accounts/1
   # DELETE /accounts/1.json
   def destroy
-    @account.destroy
+    @account.inative = true
     respond_to do |format|
-      format.html { redirect_to accounts_url, notice: 'Account was successfully destroyed.' }
-      format.json { head :no_content }
+      if @account.save
+        format.html { redirect_to accounts_url, flash:{success: 'Sua conta foi encerrada com sucesso.'} }
+        format.json { head :no_content }
+      else
+        format.html { redirect_to accounts_url, flash:{danger: 'Houve um erro no encerramento da sua conta.'} }
+        format.json { render json: @account.errors, status: :unprocessable_entity }
+      end
     end
+
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_account
-      @account = Account.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_account
+    @account = Account.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def account_params
-      params.require(:account).permit(:num_account, :num_branch, :balance, :inative)
-    end
+  # Only allow a list of trusted parameters through.
+  def account_params
+    params.require(:account).permit(:num_account, :num_branch, :balance,:client_id, :inative)
+  end
 end

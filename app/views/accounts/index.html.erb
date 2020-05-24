@@ -1,32 +1,13 @@
-<p id="notice"><%= notice %></p>
 
-
-<%= render partial: 'layouts/components/sidebar_menu' %>
 <div class="d-flex flex-column" id="content-wrapper">
+  <%= render 'layouts/components/messages' %>
   <div id="content">
     <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
-      <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
-        <form class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-          <div class="input-group">
-            <div class="input-group-append"></div>
-          </div>
-        </form>
+      <div class="container-fluid">
+        <button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop" type="button">
+          <i class="fas fa-bars"></i>
+        </button>
         <ul class="nav navbar-nav flex-nowrap ml-auto">
-          <li class="nav-item dropdown d-sm-none no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><i class="fas fa-search"></i></a>
-            <div class="dropdown-menu dropdown-menu-right p-3 animated--grow-in" role="menu" aria-labelledby="searchDropdown">
-
-              <form class="form-inline mr-auto navbar-search w-100">
-                <div class="input-group">
-                  <input class="bg-light form-control border-0 small" type="text" placeholder="Search for ...">
-                  <div class="input-group-append">
-                    <button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button>
-                  </div>
-                </div>
-              </form>
-
-
-            </div>
-          </li>
           <li class="nav-item dropdown no-arrow mx-1" role="presentation">
             <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="badge badge-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
               <div class="dropdown-menu dropdown-menu-right dropdown-list dropdown-menu-right animated--grow-in"
@@ -65,17 +46,27 @@
         </ul>
       </div>
     </nav>
+
     <div class="container-fluid">
-      <h3 class="text-dark d-flex justify-content-between mb-4">Minhas Contas<button class="btn btn-success" type="button" data-toggle="modal" data-target="#new-account"><i class="fa fa-plus"></i>&nbsp; Criar Conta</button></h3>
+
+      <div class="d-flex justify-content-between mb-4">
+        <h3 class="text-dark ">
+          Minhas Contas
+        </h3>
+        <button type='button'  id='btn-account' class='btn btn-success' action="<%=new_accounts_path(current_client) %>" >
+          <i class="fa fa-plus"></i>&nbsp; Criar Conta
+        </button>
+      </div>
+
       <div class="card shadow">
         <div class="card-header py-3">
           <p class="text-primary m-0 font-weight-bold">Informações das contas</p>
         </div>
         <div class="card-body">
           <%= form_for_filterrific @filterrific do |f| %>
-              <%= f.text_field(:search_query,
-                               placeholder: 'Busque por Conta ou Agência',
-                               class: 'filterrific-periodically-observed form-control') %>
+            <%= f.text_field(:search_query,
+                             placeholder: 'Busque por Conta ou Agência',
+                             class: 'filterrific-periodically-observed form-control') %>
             <%# add an automated spinner to your form when the list is refreshed %>
             <%= render_filterrific_spinner %>
           <% end %>
@@ -100,24 +91,63 @@
       <div class="modal-header">
         <h4 class="modal-title">Nova Conta&nbsp;</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
       <div class="modal-body">
-        <div class="container">
-          <form>
-            <div class="form-row">
-              <div class="col">
-                <div class="form-group"><label>Conta</label><input class="form-control" type="text"></div>
-              </div>
-              <div class="col">
-                <div class="form-group"><label>Agência</label><input class="form-control" type="text"></div>
-              </div>
-            </div>
-          </form>
+        <div id='js-result' class="container">
+
         </div>
       </div>
-      <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Fechar</button><button class="btn btn-primary" type="button">Salvar</button></div>
     </div>
   </div>
 </div>
-<%#= link_to 'New Account', new_account_path %>
+
+
+<script>
+
+    $('#btn-account').click( function(){
+        get_form($(this))
+    });
+    $(document).on('click', '.btn-edit', function(){
+        get_form($(this))
+    });
+
+    function get_form($form){
+        $.ajax({
+            method: "GET",
+            url: $form.attr('action'),
+            dataType: 'JSON',
+        })
+            .done(function( data ) {
+                $("#js-result").html("").append(data['html']);
+                $('#new-account').modal('show');
+            })
+            .fail(function( data ) {
+                alert('Erro ao carregar solicitação.')
+                console.log(data)
+            });
+    }
+
+    $('#js-result').on('submit','#form-account', function(event){
+        debugger
+        event.preventDefault();
+        $.ajax({
+            method: "POST",
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            dataType: 'JSON',
+        })
+            .done(function( data ) {
+                debugger
+                location.reload();
+            })
+            .fail(function( data ) {
+                debugger
+                $('#js-result').prepend(data.responseText);
+                $('#new-account').modal('show');
+            });
+    });
+
+
+</script>
+
 <style>
   .scroll-to-top {
     position: fixed;

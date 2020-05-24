@@ -1,0 +1,4 @@
+<% js = escape_javascript(
+    render(partial: 'accounts/form',  locals: { account: @account })
+) %>
+$("#js-result").html("<%= js %>");

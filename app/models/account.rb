@@ -13,8 +13,7 @@ class Account < ApplicationRecord
     order(created_at: direction)
   }
   scope :search_query, lambda{|query = ' '|
-    num = query.gsub!(/[^0-9]/, '')
-    where('num_account = ? or num_branch = ?', num)
+    where('num_account = ? or num_branch = ?', query, query)
   }
 
 end
