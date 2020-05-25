@@ -83,7 +83,7 @@
         <div id='js-result' class="container">
           <%= form_tag(withdraw_account_path(@account) ) do |form| %>
             <%= label_tag :value, 'Valor do saque' %>
-            <%= text_field_tag :value, '', class:"form-control"%>
+            <%= number_field_tag :value, '', class:"form-control",step: :any%>
             <%= label_tag :value, 'Digite a senha' %>
             <%= password_field_tag 'client[password]', '', class:"form-control"%>
             <%= submit_tag 'Sacar', class: 'btn btn-success mt-2', style:'float:right'%>
@@ -103,7 +103,7 @@
         <div id='js-result' class="container">
           <%= form_tag(deposit_account_path(@account) ) do |form| %>
             <%= label_tag :value, 'Valor do deposito' %>
-            <%= text_field_tag :value, '', class:"form-control"%>
+            <%= number_field_tag :value, '', class:"form-control",step: :any%>
             <%= submit_tag 'Depositar', class: 'btn btn-success mt-2', style:'float:right' %>
           <% end %>
         </div>
@@ -121,7 +121,7 @@
         <div id='js-result' class="container">
           <%= form_tag(transfer_account_path(@account) ) do |form| %>
             <%= label_tag :value, 'Valor da transferencia' %>
-            <%= text_field_tag :value, '', class:"form-control"%>
+            <%= number_field_tag :value, '', class:"form-control",step: :any%>
             <%= label_tag :num_account, 'Numero da conta' %>
             <%= text_field_tag :num_account, '', class:"form-control"%>
             <%= label_tag :num_branch, 'Numero da agência' %>
@@ -146,13 +146,3 @@
         .addClass('btn-secondary')
   <% end %>
 </script>
-<style>
-
-
-  .text-gray-500 {
-    color: #b7b9cc!important;
-    font-size: .7rem;
-  }
-
-
-</style>

@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 2020_05_22_220253) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "account_movements", force: :cascade do |t|
     t.date "dt_movement", null: false
     t.integer "operation", null: false

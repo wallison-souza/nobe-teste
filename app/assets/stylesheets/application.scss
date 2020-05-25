@@ -5,6 +5,9 @@ $fa-font-path: '@fortawesome/fontawesome-free/webfonts';
 @import '@fortawesome/fontawesome-free/scss/solid';
 @import '@fortawesome/fontawesome-free/scss/brands';
 @import 'bootstrap/scss/bootstrap';
+@import 'accounts';
+@import 'sidebar';
+@import 'account_movements';
 .btn-success{
   background-color: #1cc88a;
   border-color: #1cc88a;

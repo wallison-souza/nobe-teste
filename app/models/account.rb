@@ -28,8 +28,10 @@ class Account < ApplicationRecord
     value = value.to_f
     if self.balance - value >= 0
       self.balance -= value
-      if self.save
-        return self.account_movements.new(operation: 2, dt_movement: Date.today, value: value).save
+      ActiveRecord::Base.transaction do
+        if self.save
+          return self.account_movements.new(operation: 2, dt_movement: Date.today, value: value).save
+        end
       end
     else
       false
@@ -40,8 +42,10 @@ class Account < ApplicationRecord
   def deposit_value value
     value = value.to_f
     self.balance += value
-    if self.save
-      return self.account_movements.new(operation: 1, dt_movement: Date.today, value: value).save
+    ActiveRecord::Base.transaction do
+      if self.save
+        return self.account_movements.new(operation: 1, dt_movement: Date.today, value: value).save
+      end
     end
     false
   end
@@ -57,12 +61,14 @@ class Account < ApplicationRecord
     if self.balance - value >= 0
       # criando movimentação para o o usuario de destino da transferencia
       account_to_transfer.balance += value
-      if account_to_transfer.save
-        if account_to_transfer.account_movements.new(operation: 3, dt_movement: Date.today, value: value).save
-          # criando movimentação para a conta do usuario
-          self.balance -= value
-          if self.save
-            return self.account_movements.new(operation: 4, dt_movement: Date.today, value: value).save
+      ActiveRecord::Base.transaction do
+        if account_to_transfer.save
+          if account_to_transfer.account_movements.new(operation: 3, dt_movement: Date.today, value: value).save
+            # criando movimentação para a conta do usuario
+            self.balance -= value
+            if self.save
+              return self.account_movements.new(operation: 4, dt_movement: Date.today, value: value).save
+            end
           end
         end
       end
