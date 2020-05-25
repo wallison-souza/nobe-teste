@@ -13,8 +13,7 @@ gem 'bootstrap4-kaminari-views'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.3', '>= 6.0.3.1'
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3', '~> 1.4'
+
 #Pg is the Ruby interface to the PostgreSQL
 gem 'pg'
 # Use Puma as the app server
