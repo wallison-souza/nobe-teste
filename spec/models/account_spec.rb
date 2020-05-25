@@ -43,10 +43,10 @@ RSpec.describe Account, type: :model do
     expect(account_2.balance).to be > balance
   end
   it 'é valido quando feito um deposito cria-se uma movimentação' do
-    expect{ account.deposit_value(120) }.to change{ AccountMovement.count }.by(1)
+    expect{ account.deposit_value(120) }.to change{ AccountMovement.count }.by(2)
   end
   it 'é valido quando feito um saque cria-se uma movimentação' do
-    expect{ account.withdraw_value(119) }.to change{ AccountMovement.count }.by(1)
+    expect{ account.withdraw_value(119) }.to change{ AccountMovement.count }.by(2)
   end
   it 'é valido quando feito uma transferencia cria-se uma movimentação para quem transferiu' do
     client_2 = create(:client)
