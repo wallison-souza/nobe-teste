@@ -15,7 +15,7 @@ module FullErrorMessage
             "<div class='panel panel-danger fade in collapse show' id='alerta'>" +
             "<div class='panel-heading panel-heading-message'>" +
             "<a data-toggle='collapse'   href='#alerta'  class='close'> &times;</a>"+
-            "<h3>" + q_erros +' '+ p_erros + " em " + obj.class.name + "</h3>" +
+            "<h3>" + q_erros +' '+ p_erros + " em " + obj.class.model_name.human + "</h3>" +
             "<div class='panel-body panel-body-message'>" +
             "<ul class='ul-message'>" + all_erros + "</ul>" +
             "</div></div></div></div></div>"

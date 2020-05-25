@@ -2,10 +2,14 @@
 pt-BR:
   activerecord:
     models:
-      accounts: 'Contas'
-      clients: 'Cliente'
+      account:
+        one: Conta
+        other: Contas
+      client:
+        one: Cliente
+        other: Clientes
     attributes:
-      accounts:
+      account:
         num_account:  'Numero da conta'
         num_branch:  'Numero da agência'
       messages:

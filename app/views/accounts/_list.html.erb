@@ -1,5 +1,5 @@
-<div  id="filterrific_results" class="table-responsive table mt-2"  role="grid" aria-describedby="dataTable_info">
-  <table class="table my-0" id="dataTable">
+<div  id="filterrific_results" class="table-responsive table mt-2"  >
+  <table class="table my-0" >
     <thead>
     <tr>
       <th>Conta</th>
@@ -20,7 +20,7 @@
           <td><%= account.num_branch %></td>
           <td><%= account.inative ? 'ENCERRADA' : 'ATIVA' %></td>
           <td class="text-center">
-            <%= link_to  account, class:'btn btn-primary', title:"Visualizar" do%>
+            <%= link_to  index_account_movements_path(account), class:'btn btn-primary', title:"Visualizar" do%>
               <i class="fa fa-arrow-right"></i>
             <% end %>
             <button type='button' class="btn btn btn-info btn-edit" title="Editar" action="<%= edit_account_path(account.id) %>">

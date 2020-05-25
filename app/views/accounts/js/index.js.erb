@@ -1,4 +1,4 @@
 <% js = escape_javascript(
-    render(partial: 'accounts/list',  locals: { accounts: @accounts })
+    render(partial: 'accounts/list',  locals:{ account_movement_array: @account_movement_array, account_movements: @account_movements } )
 ) %>
 $("#filterrific_results").html("<%= js %>");

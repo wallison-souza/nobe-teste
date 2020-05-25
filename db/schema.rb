@@ -16,8 +16,10 @@ ActiveRecord::Schema.define(version: 2020_05_22_220253) do
     t.date "dt_movement", null: false
     t.integer "operation", null: false
     t.decimal "value", null: false
+    t.integer "account_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["account_id"], name: "index_account_movements_on_account_id"
   end
 
   create_table "accounts", force: :cascade do |t|

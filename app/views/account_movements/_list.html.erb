@@ -1,0 +1,46 @@
+<div id="filterrific_results" class="table-responsive table-borderless mt-2">
+  <table class="table table-striped table-bordered table-hover table-sm">
+    <thead>
+    <tr>
+      <th>Data</th>
+      <th>Lançamento</th>
+      <th>Valor (R$)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% account_movement_array.each do |movement_day_array| %>
+      <% sum_of_day = 0 %>
+      <% movement_day_array.each do |account_movement| %>
+        <tr>
+          <td><%= account_movement.dt_movement %></td>
+          <td><%= account_movement.operation %></td>
+          <% if account_movement.operation.in?([1,3])
+               style =  "green"
+               sum_of_day += account_movement.value
+             else
+               style = "red"
+               sum_of_day -= account_movement.value
+             end
+          %>
+          <td style="color: <%= style %>"><%= account_movement.value %></td>
+        </tr>
+
+      <% end %>
+      <tr class="font-weight-bolder">
+        <td><%= movement_day_array[0].dt_movement %></td>
+        <td>SALDO</td>
+        <td><%= sum_of_day %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-between">
+    <div class="info">
+      <%= page_entries_info account_movements, entry_name: 'resultado(s)' %>
+    </div>
+    <div class="paginate">
+      <%= paginate account_movements, theme:'twitter-bootstrap-4' %>
+    </div>
+  </div>
+</div>
+

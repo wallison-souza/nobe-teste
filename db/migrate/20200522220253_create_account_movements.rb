@@ -4,7 +4,7 @@ class CreateAccountMovements < ActiveRecord::Migration[6.0]
       t.date :dt_movement, null: false
       t.integer :operation, null: false
       t.decimal :value, null: false
-
+      t.references :account
       t.timestamps
     end
   end

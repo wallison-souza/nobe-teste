@@ -1,31 +1,158 @@
-<p id="notice"><%= notice %></p>
 
-<h1>Account Movements</h1>
+<div class="d-flex flex-column flex-grow-1" id="content-wrapper">
+  <%= render 'layouts/components/messages' %>
+  <div id="content">
+    <%= render 'layouts/components/navbar' %>
+    <div class="container-fluid">
+      <div class="d-sm-flex justify-content-center align-items-center" style="margin-bottom: 3rem;">
+        <h3 class="text-dark mb-0">Extratos e Operações</h3>
+      </div>
+      <div class="row my-3">
+        <div class="col text-center">
+          <button class="btn btn-success shadow-lg" data-toggle="modal" data-target="#withdraw-modal" type="button" style="width: 200px;height: 75px;">SACAR</button>
+        </div>
+        <div class="col text-center">
+          <button class="btn btn-success shadow-lg" data-toggle="modal" data-target="#deposit-modal" type="button" style="width: 200px;height: 75px;">DEPOSITAR</button>
+        </div>
+        <div class="col text-center">
+          <button class="btn btn-success shadow-lg" data-toggle="modal" data-target="#transfer-modal" type="button" style="width: 200px;height: 75px;">TRANSFERIR</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card shadow mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h6 class="text-primary font-weight-bold m-0">Saldo e Extrato</h6>
+            </div>
+            <div class="card-body">
+              <div class="p-3" style="background-color: #3d3535;">
+                <div><h6 class="font-weight-bold mb-1 text-gray-500">SALDO ATUAL</h6></div>
+                <div><h4 class="font-weight-bold mb-1 text-white">R$ <%= @account.balance %></h4></div>
+              </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Dt movement</th>
-      <th>Operation</th>
-      <th>Value</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+              <%= form_for_filterrific @filterrific do |f| %>
+                <div class="row">
+                  <div class="col-4">
+                    <%= f.label :start_date, 'Data de inicio', class:'w-100' %>
+                    <%= f.date_field(:start_date, class: 'filterrific-periodically-observed form-control') %>
+                  </div>
+                  <div class="col-4">
+                    <%= f.label :end_date, 'Data de inicio', class:'w-100' %>
+                    <%= f.date_field(:end_date,class: 'filterrific-periodically-observed form-control') %>
+                  </div>
 
-  <tbody>
-    <% @account_movements.each do |account_movement| %>
-      <tr>
-        <td><%= account_movement.dt_movement %></td>
-        <td><%= account_movement.operation %></td>
-        <td><%= account_movement.value %></td>
-        <td><%= link_to 'Show', account_movement %></td>
-        <td><%= link_to 'Edit', edit_account_movement_path(account_movement) %></td>
-        <td><%= link_to 'Destroy', account_movement, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+                  <div class="col-4 d-lg-flex  align-items-lg-end">
+                    <button class="btn btn-success " type="submit" title="Procurar por periodo">
+                      <i class="fa fa-search"></i>
+                    </button>
+                      <%= link_to(
+                              'Resetar filtro',
+                              reset_filterrific_url, class:'btn btn-info ml-3'
+                              ) %>
+                  </div>
+                </div>
+              <% end %>
 
-<br>
 
-<%= link_to 'New Account Movement', new_account_movement_path %>
+              <%= render partial: 'account_movements/list',
+                         locals:{ account_movement_array: @account_movement_array, account_movements: @account_movements } %>
+
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <footer class="bg-white sticky-footer">
+      <div class="container my-auto">
+        <div class="text-center my-auto copyright"><span>wallison 2020</span></div>
+      </div>
+    </footer>
+  </div>
+  <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+</div>
+
+<div class="modal fade" role="dialog" tabindex="-1" id="withdraw-modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Sacar&nbsp;</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+      <div class="modal-body">
+        <div id='js-result' class="container">
+          <%= form_tag(withdraw_account_path(@account) ) do |form| %>
+            <%= label_tag :value, 'Valor do saque' %>
+            <%= text_field_tag :value, '', class:"form-control"%>
+            <%= label_tag :value, 'Digite a senha' %>
+            <%= password_field_tag 'client[password]', '', class:"form-control"%>
+            <%= submit_tag 'Sacar', class: 'btn btn-success mt-2', style:'float:right'%>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" role="dialog" tabindex="-1" id="deposit-modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Deposito&nbsp;</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+      <div class="modal-body">
+        <div id='js-result' class="container">
+          <%= form_tag(deposit_account_path(@account) ) do |form| %>
+            <%= label_tag :value, 'Valor do deposito' %>
+            <%= text_field_tag :value, '', class:"form-control"%>
+            <%= submit_tag 'Depositar', class: 'btn btn-success mt-2', style:'float:right' %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" role="dialog" tabindex="-1" id="transfer-modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Transferencia</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+      <div class="modal-body">
+        <div id='js-result' class="container">
+          <%= form_tag(transfer_account_path(@account) ) do |form| %>
+            <%= label_tag :value, 'Valor da transferencia' %>
+            <%= text_field_tag :value, '', class:"form-control"%>
+            <%= label_tag :num_account, 'Numero da conta' %>
+            <%= text_field_tag :num_account, '', class:"form-control"%>
+            <%= label_tag :num_branch, 'Numero da agência' %>
+            <%= text_field_tag :num_branch, '', class:"form-control"%>
+            <%= label_tag :value, 'Digite a senha' %>
+            <%= password_field_tag 'client[password]', '', class:"form-control"%>
+            <%= submit_tag 'Transferir', class: 'btn btn-success mt-2', style:'float:right' %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%#= link_to 'Back', accounts_path %>
+
+<script>
+  <%if @account.inative %>
+    $("[data-toggle='modal']")
+        .prop('disabled', true)
+        .removeClass('btn-success')
+        .addClass('btn-secondary')
+  <% end %>
+</script>
+<style>
+
+
+  .text-gray-500 {
+    color: #b7b9cc!important;
+    font-size: .7rem;
+  }
+
+
+</style>

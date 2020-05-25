@@ -1,5 +1,5 @@
 class AccountsController < ApplicationController
-  before_action :set_account, only: [:show, :edit, :update, :destroy]
+  before_action :set_account, only: [:show, :edit, :update, :destroy,:withdraw, :deposit, :transfer]
   include FullErrorMessage
   # GET /accounts
   # GET /accounts.json
@@ -19,9 +19,7 @@ class AccountsController < ApplicationController
   # GET /accounts/1
   # GET /accounts/1.json
   def show
-    # {day_resume: [{type: 'saque', value:'1230.00', date: '05/11/2020'},
-    #               {type: 'saque', value:'1230.00', date: '05/11/2020'}],
-    #  balance: "2220.00"}
+
   end
 
   # GET /accounts/new
@@ -87,6 +85,64 @@ class AccountsController < ApplicationController
     end
 
   end
+
+  def withdraw
+    respond_to do |format|
+      if current_client.valid_password?(params[:client][:password])
+        if @account.withdraw_value(params[:value])
+          format.html { redirect_to index_account_movements_path(@account), flash: {success: 'Saque realizado com sucesso!'} }
+          format.json { render json: 'Saque realizado com sucesso!', status: :unprocessable_entity }
+        else
+          format.html { redirect_to index_account_movements_path(@account), flash: {danger: 'Saldo insuficiente'} }
+          format.json { render json: 'Saldo insuficiente', status: :unprocessable_entity }
+        end
+      else
+        format.html { redirect_to index_account_movements_path(@account), flash: {danger: 'Senha invalida'} }
+        format.json { render json: 'Senha invalida.', status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def deposit
+    respond_to do |format|
+      if @account.deposit_value(params[:value])
+        format.html { redirect_to index_account_movements_path(@account), flash: {success: 'Deposito realizado com sucesso!'} }
+        format.json { render json: 'Deposito realizado com sucesso!', status: :unprocessable_entity }
+      else
+        format.html { redirect_to index_account_movements_path(@account), flash: {danger: 'Saldo insuficiente'} }
+        format.json { render json: 'Saldo insuficiente', status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def transfer
+    respond_to do |format|
+      if current_client.valid_password?(params[:client][:password])
+        if account_to_transfer = Account.find_by(num_branch: params[:num_branch], num_account: params[:num_account])
+          if !account_to_transfer.inative
+            if @account.transfer_value(account_to_transfer, params[:value])
+              format.html { redirect_to index_account_movements_path(@account), flash: {success: 'Transferencia realizada com sucesso!'} }
+              format.json { render json: 'Transferencia realizada com sucesso!', status: :unprocessable_entity }
+            else
+              format.html { redirect_to index_account_movements_path(@account), flash: {danger: 'Saldo insuficiente'} }
+              format.json { render json: 'Saldo insuficiente', status: :unprocessable_entity }
+            end
+          else
+            format.html { redirect_to index_account_movements_path(@account),
+                                      flash: {danger: 'A conta para qual você está tentando transferir foi encerrada!'} }
+            format.json { render json: 'A conta para qual você está tentando transferir foi encerrada!', status: :unprocessable_entity }
+          end
+        else
+          format.html { redirect_to index_account_movements_path(@account), flash: {danger: 'Não foi encontrada a conta e agência'} }
+          format.json { render json: 'Não foi encontrada a conta e agência', status: :unprocessable_entity }
+        end
+      else
+        format.html { redirect_to index_account_movements_path(@account), flash: {danger: 'Senha invalida'} }
+        format.json { render json: 'Senha invalida.', status: :unprocessable_entity }
+      end
+    end
+  end
+
 
   private
   # Use callbacks to share common setup or constraints between actions.
