@@ -12,7 +12,7 @@ Things you may want to cover:
 
 * Configuration
 
-* Database SQLite3
+* Database Postgresql
 
 * Database initialization
 
